@@ -1,73 +1,84 @@
-# React + TypeScript + Vite
+# STFC Community Mod Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Modern static website for `netniV/stfc-mod`, built with React + TypeScript + Vite for GitHub Pages / Cloudflare Pages style deployments.
 
-Currently, two official plugins are available:
+## What this site includes
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Home page with project overview and quick actions
+- Getting-started section
+- Download/install section with release/install links
+- Dedicated **Mod Config Builder** with:
+  - grouped settings across all major config sections
+  - searchable controls
+  - import existing `.toml`
+  - live preview
+  - copy to clipboard
+  - download `community_patch_settings.toml`
+- Responsive layout for mobile/desktop
+- Basic accessibility and SEO foundations
 
-## React Compiler
+## Tech stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite 8
+- ESLint
 
-## Expanding the ESLint configuration
+## Local development
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Then open the local URL printed by Vite (typically `http://localhost:5173`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Build and verify
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run lint
+npm run build
 ```
+
+Production assets are generated into `dist/`.
+
+## Deploy
+
+### Cloudflare Pages
+
+- Build command: `npm run build`
+- Output directory: `dist`
+
+### GitHub Pages
+
+Any workflow that installs dependencies and publishes `dist/` works.
+
+Example build steps:
+
+```bash
+npm ci
+npm run build
+```
+
+Publish `dist/` as your Pages artifact.
+
+## Mod config implementation and maintenance
+
+The mod config editor is data-driven and maintained in:
+
+- Schema/defaults: `/src/data/configSchema.ts`
+- TOML parser/serializer: `/src/lib/toml.ts`
+- UI/editor flow: `/src/App.tsx`
+
+To maintain parity with future mod settings:
+
+1. Add or update fields in `configSchema.ts` (section/group/key/type/default).
+2. Confirm import/export behavior in `toml.ts` for new value types.
+3. Verify in the UI and run:
+   - `npm run lint`
+   - `npm run build`
+
+## Notes
+
+- This website intentionally keeps dependencies minimal.
+- Generated TOML output targets `community_patch_settings.toml` usage for STFC Community Mod.
